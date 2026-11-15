@@ -11,6 +11,7 @@ import { useSlideContext } from '@slidev/client'
 import { computed, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
 import geo from '../data/taiwan-map.json'
 import { journeys, modes, type Stop } from '../data/journeys'
+import { asset } from '../setup/asset'
 
 const props = withDefaults(defineProps<{ day: number, width?: number, height?: number }>(), {
   width: 600,
@@ -205,7 +206,7 @@ const landTransform = computed(() => `translate(${-cam.x * scale.value},${-cam.y
           <span :class="modes[s.leg.mode].icon" />{{ s.leg.note }}
         </li>
         <li class="tl-stop" :class="{ on: activeIndex === i, dim: step <= legCount && step < i }">
-          <img v-if="s.thumb" :src="s.thumb" alt="">
+          <img v-if="s.thumb" :src="asset(s.thumb)" alt="">
           <div>
             <div class="tl-time">{{ s.time }}</div>
             <div class="tl-name">{{ s.name }}</div>
