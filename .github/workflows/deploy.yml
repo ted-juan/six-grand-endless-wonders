@@ -37,6 +37,11 @@ jobs:
       - name: Build
         run: pnpm exec slidev build --download --base /${{ github.event.repository.name }}/
 
+      # GitHub Pages 沒有 SPA rewrite；直接開 /2 這類網址會 404。
+      # 用 index.html 當 404.html，讓 Slidev 的前端路由接手。
+      - name: SPA fallback
+        run: cp dist/index.html dist/404.html
+
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
