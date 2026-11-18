@@ -1,9 +1,10 @@
 <!--
-  JourneyMap — 一天行程的動態路線圖（區域地圖 + 左側時間軸）。
-  用法：<JourneyMap :day="1" />，並在該頁 frontmatter 設定 clicks = 站數（= 段數 + 1）。
-    click 0      ：全日總覽（只有站點）
-    click 1..N-1 ：鏡頭飛到第 k 段，交通工具沿弧線移動並畫出路線
-    click N      ：全日總覽（所有路線）
+  JourneyMap — 一天行程的動態路線圖（區域地圖 + 左側時間軸 + 迷你旅人 + 到站實景放大）。
+  用法：<JourneyMap :day="1" />，並在該頁 frontmatter 設定 clicks = 站數 + 1。
+    click 0      ：全日總覽（迷你旅人站在起點）
+    click 1      ：鏡頭拉近並放大第一站實景
+    click 2..N   ：回到地圖，跟隨迷你旅人移動到下一站並放大該站實景
+    click N+1    ：全日總覽（所有路線）
   底圖：內政部鄉鎮市區界（taiwan-atlas, MIT），已預先投影成 data/taiwan-map.json。
 -->
 <script setup lang="ts">
@@ -22,8 +23,9 @@ const W = props.width
 const H = props.height
 const stops = computed<Stop[]>(() => journeys[props.day])
 const legCount = computed(() => stops.value.length - 1)
+const totalSteps = computed(() => stops.value.length + 1)
 const { $clicks } = useSlideContext()
-const step = computed(() => Math.max(0, Math.min(legCount.value + 1, $clicks.value ?? 0)))
+const step = computed(() => Math.max(0, Math.min(totalSteps.value, $clicks.value ?? 0)))
 
 // ---------------------------------------------------------------- projection (same as tools/geo.py)
 const P = geo.proj
@@ -47,12 +49,13 @@ function fit(pts: [number, number][], pad = 0.22, minW = 42): Cam {
   return { x: cx - w / 2, y: cy - h / 2, w, h }
 }
 function targetCam(s: number): Cam {
-  if (s >= 1 && s <= legCount.value) return fit([world.value[s - 1], world.value[s]], 0.3)
+  if (s >= 1 && s <= stops.value.length) return fit([world.value[s - 1]], 0.3, 18)
   return fit(world.value, 0.3)
 }
 
 const cam = reactive<Cam>(targetCam(step.value))
 const progress = ref(1) // drawing progress of the current leg (0..1)
+const showScene = ref(false)
 const scale = computed(() => W / cam.w)
 function toScreen([x, y]: [number, number]): [number, number] {
   return [(x - cam.x) * scale.value, (y - cam.y) * scale.value]
@@ -74,28 +77,51 @@ function tween(ms: number, fn: (t: number) => void): Promise<void> {
 }
 const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2)
 let run = 0
-async function go(s: number, animate: boolean) {
-  cancelAnimationFrame(raf)
-  const id = ++run
-  const to = targetCam(s)
-  if (!animate) {
-    Object.assign(cam, to)
-    progress.value = 1
-    return
-  }
+async function tweenCam(to: Cam, ms: number, id: number) {
   const from = { ...cam }
-  progress.value = 0
-  await tween(900, (t) => {
+  await tween(ms, (t) => {
+    if (id !== run) return
     const e = ease(t)
     cam.x = from.x + (to.x - from.x) * e
     cam.y = from.y + (to.y - from.y) * e
     cam.w = from.w + (to.w - from.w) * e
     cam.h = from.h + (to.h - from.h) * e
   })
-  if (id !== run) return
-  await tween(1500, t => (progress.value = ease(t)))
 }
-watch(step, (s, prev) => go(s, s > prev && s <= legCount.value))
+async function go(s: number, animate: boolean) {
+  cancelAnimationFrame(raf)
+  const id = ++run
+  showScene.value = false
+  if (!animate) {
+    Object.assign(cam, targetCam(s))
+    progress.value = 1
+    showScene.value = s >= 1 && s <= stops.value.length
+    return
+  }
+  if (s === 1) {
+    progress.value = 1
+    await tweenCam(targetCam(1), 700, id)
+    if (id !== run) return
+    showScene.value = true
+    return
+  }
+  if (s >= 2 && s <= stops.value.length) {
+    progress.value = 0
+    await tweenCam(fit([world.value[s - 2], world.value[s - 1]], 0.3), 750, id)
+    if (id !== run) return
+    await tween(1400, (t) => {
+      if (id === run) progress.value = ease(t)
+    })
+    if (id !== run) return
+    await tweenCam(targetCam(s), 550, id)
+    if (id !== run) return
+    showScene.value = true
+    return
+  }
+  progress.value = 1
+  await tweenCam(targetCam(s), 700, id)
+}
+watch(step, (s, prev) => go(s, s > prev))
 onMounted(() => go(step.value, false))
 onBeforeUnmount(() => cancelAnimationFrame(raf))
 
@@ -117,14 +143,16 @@ const legs = computed(() => {
   const out = []
   const s = step.value
   for (let i = 1; i <= legCount.value; i++) {
-    const done = s > legCount.value || i < s
-    const current = i === s
+    const done = s > stops.value.length || i < s - 1
+    const current = s >= 2 && s <= stops.value.length && i === s - 1
     if (!done && !current) continue
     const q = arc(toScreen(world.value[i - 1]), toScreen(world.value[i]))
     const t = current ? progress.value : 1
     const p = partial(q, Math.max(t, 0.001))
     const m = modes[stops.value[i].leg!.mode]
-    out.push({ i, d: p.d, end: p.end, mode: stops.value[i].leg!.mode, color: m.color, current })
+    const time = stops.value[i].leg?.note ?? ''
+    const midpoint = [(q.a[0] + q.b[0]) / 2, (q.a[1] + q.b[1]) / 2] as [number, number]
+    out.push({ i, d: p.d, end: p.end, mode: stops.value[i].leg!.mode, color: m.color, current, time, midpoint })
   }
   return out
 })
@@ -134,8 +162,26 @@ const vehicle = computed(() => {
   return { x: l.end[0], y: l.end[1], color: l.color, icon: modes[l.mode].icon }
 })
 
+const currentStopIndex = computed(() => {
+  if (step.value === 0) return 0
+  if (step.value <= stops.value.length) return step.value - 1
+  return stops.value.length - 1
+})
+const traveler = computed(() => {
+  const isMoving = Boolean(vehicle.value && progress.value < 0.99)
+  if (isMoving && vehicle.value) {
+    return { x: vehicle.value.x, y: vehicle.value.y, moving: true }
+  }
+  const [x, y] = toScreen(world.value[currentStopIndex.value])
+  return { x, y, moving: false }
+})
+const activeScene = computed(() => {
+  if (!showScene.value || step.value < 1 || step.value > stops.value.length) return null
+  return stops.value[step.value - 1]
+})
+
 // ---------------------------------------------------------------- markers & labels
-const activeIndex = computed(() => (step.value >= 1 && step.value <= legCount.value ? step.value : -1))
+const activeIndex = computed(() => (step.value >= 1 && step.value <= stops.value.length ? step.value - 1 : -1))
 const markers = computed(() => {
   const seen = new Map<string, number>()
   const list: { key: string, x: number, y: number, idx: number[] }[] = []
@@ -146,7 +192,7 @@ const markers = computed(() => {
     seen.set(key, list.length)
     list.push({ key, x, y, idx: [i] })
   })
-  const visibleUpTo = step.value === 0 || step.value > legCount.value ? stops.value.length - 1 : step.value
+  const visibleUpTo = step.value === 0 || step.value > stops.value.length ? stops.value.length - 1 : step.value - 1
   return list.map(m => ({
     ...m,
     reached: m.idx.some(i => i <= visibleUpTo),
@@ -160,9 +206,10 @@ const labels = computed(() => {
   const order = [...markers.value].sort((a, b) => Number(b.active) - Number(a.active))
   const out = []
   const flip = { left: 'right', right: 'left', top: 'bottom', bottom: 'top' } as const
+  const minGap = 42
   for (const m of order) {
     if (!m.inView || !m.reached) continue
-    if (placed.some(([x, y]) => Math.hypot(x - m.x, y - m.y) < 30)) continue
+    if (placed.some(([x, y]) => Math.hypot(x - m.x, y - m.y) < minGap)) continue
     placed.push([m.x, m.y])
     const first = stops.value[m.idx[0]]
     const time = m.idx.map(i => stops.value[i].time).join(' · ')
@@ -202,10 +249,10 @@ const landTransform = computed(() => `translate(${-cam.x * scale.value},${-cam.y
     <!-- timeline -->
     <ol class="tl">
       <template v-for="(s, i) in stops" :key="i">
-        <li v-if="s.leg" class="tl-leg" :class="{ dim: step <= legCount && step < i }" :style="{ '--c': modes[s.leg.mode].color }">
+        <li v-if="s.leg" class="tl-leg" :class="{ dim: step >= 1 && step <= stops.length && step - 1 < i }" :style="{ '--c': modes[s.leg.mode].color }">
           <span :class="modes[s.leg.mode].icon" />{{ s.leg.note }}
         </li>
-        <li class="tl-stop" :class="{ on: activeIndex === i, dim: step <= legCount && step < i }">
+        <li class="tl-stop" :class="{ on: activeIndex === i, dim: step >= 1 && step <= stops.length && step - 1 < i }">
           <img v-if="s.thumb" :src="asset(s.thumb)" alt="">
           <div>
             <div class="tl-time">{{ s.time }}</div>
@@ -239,6 +286,10 @@ const landTransform = computed(() => `translate(${-cam.x * scale.value},${-cam.y
         </g>
       </svg>
 
+      <template v-for="l in legs" :key="`time-${l.i}`">
+        <div v-if="l.time" class="route-time" :style="{ left: `${l.midpoint[0]}px`, top: `${l.midpoint[1]}px` }">{{ l.time }}</div>
+      </template>
+
       <!-- stop markers -->
       <div
         v-for="m in markers" v-show="m.inView" :key="m.key" class="pin"
@@ -251,10 +302,69 @@ const landTransform = computed(() => `translate(${-cam.x * scale.value},${-cam.y
       >
         <b>{{ l.time }}</b>{{ l.name }}
       </div>
-      <!-- vehicle -->
-      <div v-if="vehicle" class="vehicle" :style="{ left: `${vehicle.x}px`, top: `${vehicle.y}px`, background: vehicle.color }">
+      <!-- vehicle (during transit) -->
+      <div v-if="vehicle && traveler.moving" class="vehicle" :style="{ left: `${vehicle.x}px`, top: `${vehicle.y}px`, background: vehicle.color }">
         <span :class="vehicle.icon" />
       </div>
+
+      <!-- mini traveler character -->
+      <div class="traveler" :class="{ moving: traveler.moving }" :style="{ left: `${traveler.x}px`, top: `${traveler.y}px` }">
+        <svg viewBox="0 0 36 44" width="28" height="34" aria-hidden="true">
+          <ellipse cx="18" cy="41" rx="9" ry="2.5" fill="rgba(15,23,42,0.28)" />
+          <!-- backpack -->
+          <rect x="6" y="19" width="7" height="11" rx="3" fill="#ea580c" stroke="#fff" stroke-width="1.4" />
+          <!-- legs -->
+          <line x1="15" y1="31" x2="13" y2="39" stroke="#1e293b" stroke-width="2.8" stroke-linecap="round" />
+          <line x1="21" y1="31" x2="23" y2="39" stroke="#1e293b" stroke-width="2.8" stroke-linecap="round" />
+          <!-- body -->
+          <rect x="11" y="18" width="14" height="14" rx="5" fill="#0d9488" stroke="#fff" stroke-width="1.6" />
+          <!-- head -->
+          <circle cx="18" cy="12" r="7.5" fill="#fde68a" stroke="#fff" stroke-width="1.6" />
+          <!-- sunhat -->
+          <path d="M9 10 Q18 3 27 10 Z" fill="#f59e0b" stroke="#fff" stroke-width="1.3" />
+          <ellipse cx="18" cy="10" rx="11" ry="2.4" fill="#fbbf24" stroke="#fff" stroke-width="1.2" />
+          <!-- eyes -->
+          <circle cx="15.8" cy="12.5" r="1.1" fill="#1e293b" />
+          <circle cx="20.2" cy="12.5" r="1.1" fill="#1e293b" />
+        </svg>
+      </div>
+
+      <!-- scene zoom-in card on arrival -->
+      <Transition name="scene-zoom">
+        <div v-if="activeScene" class="scene-card">
+          <img v-if="activeScene.thumb" :src="asset(activeScene.thumb)" :alt="activeScene.name" class="scene-img">
+          <div class="scene-scrim" />
+          <div class="scene-badge">
+            <span class="scene-dot" />
+            <span>{{ activeScene.time }} · Arrived</span>
+          </div>
+          <div class="scene-title">{{ activeScene.name }}</div>
+
+          <!-- Moon-block divination (擲筊) animation for Longshan Temple -->
+          <div v-if="activeScene.effect === 'jiaobei'" class="jiaobei-box">
+            <svg viewBox="0 0 120 76" width="110" height="70" class="jiaobei-svg">
+              <!-- ground shadow -->
+              <ellipse cx="38" cy="64" rx="18" ry="4" fill="rgba(0,0,0,0.35)" />
+              <ellipse cx="82" cy="64" rx="18" ry="4" fill="rgba(0,0,0,0.35)" />
+              <!-- left moon block (flat side up - light inner wood) -->
+              <g class="block-left">
+                <path d="M18,56 C22,40 46,38 54,54 C44,58 28,60 18,56 Z" fill="#fca5a5" stroke="#991b1b" stroke-width="2" />
+                <path d="M22,55 C28,45 42,44 50,53" fill="none" stroke="#fef2f2" stroke-width="1.5" stroke-linecap="round" />
+              </g>
+              <!-- right moon block (curved side up - deep red) -->
+              <g class="block-right">
+                <path d="M66,54 C74,38 98,40 102,56 C92,60 76,58 66,54 Z" fill="#dc2626" stroke="#7f1d1d" stroke-width="2" />
+                <path d="M72,49 C80,43 90,44 96,50" fill="none" stroke="#f87171" stroke-width="1.8" stroke-linecap="round" />
+              </g>
+              <!-- golden sparkles -->
+              <circle cx="60" cy="24" r="2.2" fill="#fde047" class="sparkle s1" />
+              <circle cx="44" cy="18" r="1.6" fill="#fde047" class="sparkle s2" />
+              <circle cx="76" cy="20" r="1.8" fill="#fde047" class="sparkle s3" />
+            </svg>
+            <div class="jiaobei-label">擲筊 Moon-Block Divination · <b>聖筊 Shengjiao (Yes!)</b></div>
+          </div>
+        </div>
+      </Transition>
 
       <!-- inset: where we are on the island -->
       <svg class="inset" viewBox="-820 -760 1880 3500" width="46" height="86">
@@ -309,8 +419,66 @@ const landTransform = computed(() => `translate(${-cam.x * scale.value},${-cam.y
 .tag.active { background: #1e293b; color: #fff; }
 .tag.active b { color: #fcd34d; }
 
-.vehicle { position: absolute; width: 26px; height: 26px; margin: -13px 0 0 -13px; border-radius: 50%; color: #fff;
-  display: grid; place-items: center; font-size: 15px; border: 2px solid #fff; box-shadow: 0 2px 6px rgba(0, 0, 0, .3); }
+.route-time { position: absolute; transform: translate(-50%, -50%); padding: 2px 6px; border-radius: 999px;
+  background: rgba(255,255,255,.9); border: 1px solid #d1d5db; color: #7c2d12; font-size: 8.5px; font-weight: 700;
+  letter-spacing: .04em; text-transform: uppercase; white-space: nowrap; box-shadow: 0 2px 6px rgba(15, 23, 42, .1); }
+
+.vehicle { position: absolute; width: 24px; height: 24px; margin: -12px 0 0 -12px; border-radius: 50%; color: #fff;
+  display: grid; place-items: center; font-size: 13px; border: 2px solid #fff; box-shadow: 0 2px 6px rgba(0, 0, 0, .3); z-index: 4; }
+
+.traveler { position: absolute; width: 28px; height: 34px; margin: -30px 0 0 -14px; pointer-events: none; z-index: 5;
+  filter: drop-shadow(0 2px 3px rgba(15, 23, 42, .3)); transition: transform .25s ease; }
+.traveler.moving { animation: walk-bob .38s ease-in-out infinite alternate; margin-top: -42px; }
+@keyframes walk-bob {
+  from { transform: translateY(0) rotate(-4deg); }
+  to { transform: translateY(-4px) rotate(4deg); }
+}
+
+.scene-card { position: absolute; inset: 18px; border-radius: 12px; overflow: hidden; z-index: 10;
+  box-shadow: 0 16px 36px rgba(15, 23, 42, .45); border: 2.5px solid rgba(255, 255, 255, .92); background: #0f172a; }
+.scene-img { width: 100%; height: 100%; object-fit: cover; display: block; animation: ken-burns 6s ease-out forwards; }
+@keyframes ken-burns {
+  from { transform: scale(1); }
+  to { transform: scale(1.07); }
+}
+.scene-scrim { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(15,23,42,.15) 0%, rgba(15,23,42,.05) 45%, rgba(15,23,42,.82) 100%); }
+.scene-badge { position: absolute; top: 12px; left: 12px; display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 10px; border-radius: 999px; background: rgba(15, 23, 42, .72); color: #fef3c7; font-size: 11px; font-weight: 600; backdrop-filter: blur(4px); }
+.scene-dot { width: 7px; height: 7px; border-radius: 50%; background: #f59e0b; box-shadow: 0 0 0 3px rgba(245, 158, 11, .3); }
+.scene-title { position: absolute; left: 16px; bottom: 14px; color: #fff; font-size: 20px; font-weight: 700; text-shadow: 0 2px 8px rgba(0, 0, 0, .6); max-width: 60%; }
+
+.jiaobei-box { position: absolute; right: 12px; bottom: 12px; padding: 8px 12px; border-radius: 10px;
+  background: rgba(15, 23, 42, .82); border: 1px solid rgba(251, 191, 36, .45); backdrop-filter: blur(6px);
+  display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.jiaobei-label { font-size: 10px; color: #fef3c7; white-space: nowrap; }
+.jiaobei-label b { color: #fde047; }
+.block-left { transform-origin: 36px 52px; animation: toss-left 1.3s cubic-bezier(.22,1,.36,1) forwards; }
+.block-right { transform-origin: 84px 52px; animation: toss-right 1.3s cubic-bezier(.22,1,.36,1) forwards; }
+@keyframes toss-left {
+  0% { transform: translateY(-28px) rotate(-140deg) scale(.85); opacity: 0; }
+  45% { transform: translateY(-34px) rotate(40deg) scale(1.05); opacity: 1; }
+  75% { transform: translateY(2px) rotate(-8deg); }
+  100% { transform: translateY(0) rotate(0deg); }
+}
+@keyframes toss-right {
+  0% { transform: translateY(-32px) rotate(160deg) scale(.85); opacity: 0; }
+  50% { transform: translateY(-36px) rotate(-35deg) scale(1.05); opacity: 1; }
+  78% { transform: translateY(2px) rotate(8deg); }
+  100% { transform: translateY(0) rotate(0deg); }
+}
+.sparkle { opacity: 0; animation: pop-sparkle .8s ease-out 1.1s forwards; }
+.s2 { animation-delay: 1.2s; }
+.s3 { animation-delay: 1.3s; }
+@keyframes pop-sparkle {
+  0% { opacity: 0; transform: scale(0); }
+  60% { opacity: 1; transform: scale(1.3); }
+  100% { opacity: .9; transform: scale(1); }
+}
+
+.scene-zoom-enter-active { transition: opacity .35s ease, transform .4s cubic-bezier(.22,1,.36,1); }
+.scene-zoom-leave-active { transition: opacity .25s ease, transform .25s ease; }
+.scene-zoom-enter-from { opacity: 0; transform: scale(.35); }
+.scene-zoom-leave-to { opacity: 0; transform: scale(.65); }
 
 .inset { position: absolute; top: 10px; right: 10px; background: rgba(255, 255, 255, .7); border-radius: 6px; padding: 3px; }
 .inset-land { fill: #d6cdb6; }

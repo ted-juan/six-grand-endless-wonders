@@ -5,15 +5,11 @@ class: text-center
 title: Six Grand, Endless Wonders
 exportFilename: six-grand-endless-wonders
 transition: slide-left
-fonts:
-  sans: Noto Sans,Noto Sans TC
-  serif: Noto Serif,Noto Serif TC
-  mono: Fira Code
 ---
 
 # Six Grand, Endless Wonders
 
-<p class="!opacity-95" style="text-shadow: 0 2px 10px rgba(0,0,0,.9)">3-Day Northern to Central Taiwan Cultural Expedition</p>
+<p class="!opacity-95" style="text-shadow: 0 2px 10px rgba(0,0,0,.9)">Team Taiwan</p>
 
 **Team Members:** 何宣辰、阮紫瑄、曾筠淇、張詠皓、麥樂筠
 
@@ -22,43 +18,53 @@ Cover: Jiufen Old Street at night — Sunkenbean (CC BY-SA 4.0), via Wikimedia C
 </Credit>
 
 ---
+class: text-sm
+---
 
-### Day 01 · Taipei & Mountain Towns
+### Overview · Agenda
 
-## Historic Temples & Lantern Skies
+## Table of Contents
 
-<div class="grid grid-cols-[1fr_230px] gap-6 mt-3">
-<div>
+<div class="grid grid-cols-2 gap-4 mt-6">
+  <Link to="3" class="!border-none block p-4 rounded-lg bg-amber-50/70 hover:bg-amber-100/80 transition">
+    <div class="text-xs font-bold tracking-wider uppercase text-amber-700">01 · Day 01</div>
+    <div class="text-base font-bold mt-1 text-slate-800">Taipei & Mountain Towns</div>
+    <div class="text-xs text-slate-600 mt-1">Yonghe Soy Milk, Longshan Temple, Shifen, Jiufen, TCM & Ningxia Night Market</div>
+  </Link>
 
-<v-clicks>
+  <Link to="5" class="!border-none block p-4 rounded-lg bg-amber-50/70 hover:bg-amber-100/80 transition">
+    <div class="text-xs font-bold tracking-wider uppercase text-amber-700">02 · Day 02</div>
+    <div class="text-base font-bold mt-1 text-slate-800">Heading South to Taichung</div>
+    <div class="text-xs text-slate-600 mt-1">Four Four South Village, Taipei 101, Miyahara Eye Hospital & Shenji New Village</div>
+  </Link>
 
-- **07:00 – 11:00｜Ximending & Longshan Temple**
-  - Breakfast at **Yongfu Egg Pancake** (Exit 1, MRT Ximen; NT$50–80).
-  - Walk 18 mins to **Bangka Longshan Temple** for incense rituals & moon-block divination until 11:00.
-- **Afternoon｜Pingxi Line & Jiufen Old Street**
-  - TRA train to **Shifen Old Street** for shared sky lanterns (~NT$200–250/group).
-  - Dusk at **Jiufen**: **Lai A-Po Taro Balls**, 3rd-gen **A-Lan Caozaiguo**, & **Yuwan Bozai**.
-- **Evening｜TCM & Night Market**
-  - Acupuncture at **Changshengtang TCM Clinic** (NT$150–300), **Ningxia Night Market**, & stay at **CU Hotel Taipei** (NT$556).
+  <Link to="8" class="!border-none block p-4 rounded-lg bg-amber-50/70 hover:bg-amber-100/80 transition">
+    <div class="text-xs font-bold tracking-wider uppercase text-amber-700">03 · Day 03</div>
+    <div class="text-base font-bold mt-1 text-slate-800">Lukang Heritage & Return</div>
+    <div class="text-xs text-slate-600 mt-1">Lukang Old Street, Nine-Turns Lane, Tianhou Temple & Taoyuan Airport (TPE)</div>
+  </Link>
 
-</v-clicks>
+  <Link to="11" class="!border-none block p-4 rounded-lg bg-amber-50/70 hover:bg-amber-100/80 transition">
+    <div class="text-xs font-bold tracking-wider uppercase text-amber-700">04 · Budget</div>
+    <div class="text-base font-bold mt-1 text-slate-800">Financial Summary</div>
+    <div class="text-xs text-slate-600 mt-1">3-Day Total Budget Overview (Under NT$ 6,000 / Person)</div>
+  </Link>
 
-> **Day 1 Estimated Cost:** <span v-mark.underline.orange>~ NT$ 1,531 / person</span>
+  <Link to="12" class="!border-none block p-4 rounded-lg bg-amber-50/70 hover:bg-amber-100/80 transition">
+    <div class="text-xs font-bold tracking-wider uppercase text-amber-700">05 · Culture</div>
+    <div class="text-base font-bold mt-1 text-slate-800">Cultural & Historical Insights</div>
+    <div class="text-xs text-slate-600 mt-1">Heritage Context Behind Our Six Destinations</div>
+  </Link>
 
+  <Link to="14" class="!border-none block p-4 rounded-lg bg-amber-50/70 hover:bg-amber-100/80 transition">
+    <div class="text-xs font-bold tracking-wider uppercase text-amber-700">06 · Credits</div>
+    <div class="text-base font-bold mt-1 text-slate-800">Photo Credits & Sources</div>
+    <div class="text-xs text-slate-600 mt-1">Wikimedia Commons & Attribution References</div>
+  </Link>
 </div>
-<div class="flex flex-col gap-2">
-  <Pic src="/photos/longshan.jpg" label="Bangka Longshan Temple" class="h-28" />
-  <Pic src="/photos/shifen.jpg" label="Shifen Old Street · Sky Lanterns" class="h-28" />
-  <Pic src="/photos/ningxia.jpg" label="Ningxia Night Market" class="h-28" />
-</div>
-</div>
-
-<Credit>
-Longshan Temple: CEphoto, Uwe Aranas (CC BY-SA 3.0) · Shifen: xiquinhosilva (CC BY 2.0) · Ningxia: 迷惘的人生 (CC BY-SA 2.0) — via Wikimedia Commons
-</Credit>
 
 ---
-clicks: 4
+clicks: 7
 ---
 
 ### Day 01 · Journey Map
@@ -67,37 +73,77 @@ clicks: 4
 
 <JourneyMap :day="1" />
 
+<Credit>
+Yonghe Soy Milk: KQuhen (CC BY-SA 4.0) · Acupuncture: Kyle Hunter (Public Domain) — via Wikimedia Commons
+</Credit>
+
+---
+class: text-sm
 ---
 
-### Day 01 · Scene Preview
+### Day 01 · Taipei & Mountain Towns
 
-## Jiufen Old Street at Dusk
+## Historic Temples & Lantern Skies
 
-<img :src="$asset('/jiufen.jpg')" class="h-72 mx-auto rounded-lg shadow-lg" />
+<div class="grid grid-cols-[1.35fr_220px] gap-8 mt-3">
+<div class="pr-2">
 
-*Photo / Taken by our group*
+- **07:00 – 11:00｜Ximending & Longshan Temple**
+  - Breakfast at **Yonghe Soy Milk** (Exit 1, MRT Ximen; NT$50–80).
+  - Walk 18 mins at 08:30 to **Bangka Longshan Temple** for incense rituals & moon-block divination until 11:00.
+- **Afternoon｜Pingxi Line & Jiufen Old Street**
+  - TRA train to **Shifen Old Street** for shared sky lanterns (~NT$200–250/group).
+  - Dusk at **Jiufen**: **Lai A-Po Taro Balls**, 3rd-gen **A-Lan Caozaiguo**, & **Yuwan Bozai** (~NT$300).
+- **Evening｜TCM & Night Market**
+  - Acupuncture at **Changshengtang TCM Clinic** (NT$150–300), **Ningxia Night Market**, & stay at **CU Hotel Taipei** (NT$556).
 
+> **Day 1 Estimated Cost:** ~ <span v-mark.underline.orange>NT$ 1,681</span> / person
+
+</div>
+<div class="flex flex-col gap-4">
+  <Pic src="/photos/longshan.jpg" label="Bangka Longshan Temple" class="h-26" />
+  <Pic src="/photos/shifen.jpg" label="Shifen Old Street · Sky Lanterns" class="h-26" />
+  <Pic src="/photos/ningxia.jpg" label="Ningxia Night Market" class="h-26" />
+</div>
+</div>
+
+<Credit>
+Longshan Temple: CEphoto, Uwe Aranas (CC BY-SA 3.0) · Shifen: C.L. Kao (CC BY-SA 3.0) · Ningxia: 迷惘的人生 (CC BY-SA 2.0) — via Wikimedia Commons
+</Credit>
+
+---
+clicks: 7
+---
+
+### Day 02 · Journey Map
+
+## From Taipei Down to Taichung
+
+<JourneyMap :day="2" />
+
+<Credit>
+Taipei 101: AngMoKio (CC BY-SA 3.0) · Taipei Bus Station: Chen Hao Hsuan (CC BY 2.0) — via Wikimedia Commons
+</Credit>
+
+---
+class: text-sm
 ---
 
 ### Day 02 · Heading South to Taichung
 
 ## Urban Icons & Cultural Clusters
 
-<div class="grid grid-cols-[1fr_230px] gap-6 mt-3">
-<div>
-
-<v-clicks>
+<div class="grid grid-cols-[1.35fr_220px] gap-8 mt-3">
+<div class="pr-2">
 
 - **09:00–11:30｜Xinyi District:** Visit **Four Four South Village** for panoramic **Taipei 101** photos.
 - **12:00–14:30｜Southbound Coach:** Intercity coach from Taipei Bus Station to Taichung (~2.5 hrs).
 - **14:30–16:30｜Miyahara Ophthalmology:** Drop bags at hostel; red-brick heritage & signature ice cream.
-- **16:30–21:00｜Shenji New Village & Greenway:** Artisan markets in renovated dorms & evening stroll at Park Lane by CMP.
-
-</v-clicks>
+- **16:30–21:00｜Shenji New Village & Greenway:** Artisan markets in renovated dorms & evening stroll at Taichung Eslite Park Lane.
 
 <div class="text-xs [&_td]:!py-1 [&_th]:!py-1">
 
-**Day 2 Budget Breakdown (<span v-mark.underline.orange>Subtotal: NT$ 2,090</span>):**
+**Day 2 Budget Breakdown (Subtotal: <span v-mark.underline.orange>NT$ 2,090</span>):**
 
 | Item | Cost | Item | Cost |
 |---|---|---|---|
@@ -107,26 +153,16 @@ clicks: 4
 
 </div>
 </div>
-<div class="flex flex-col gap-2">
-  <Pic src="/photos/fourfour.jpg" label="Four Four South Village × Taipei 101" class="h-28" />
-  <Pic src="/photos/miyahara.jpg" label="Miyahara Eye Hospital" class="h-28" />
-  <Pic src="/photos/shenji.jpg" label="Shenji New Village" class="h-28" />
+<div class="flex flex-col gap-4">
+  <Pic src="/photos/fourfour.jpg" label="Four Four South Village × Taipei 101" class="h-26" />
+  <Pic src="/photos/miyahara.jpg" label="Miyahara Eye Hospital" class="h-26" />
+  <Pic src="/photos/shenji.jpg" label="Shenji New Village" class="h-26" />
 </div>
 </div>
 
 <Credit>
 Four Four South Village: Hal Maa (CC BY-SA 4.0) · Miyahara: YangChen(TW) (CC BY 2.0) · Shenji: Wpcpey (CC BY 4.0) — via Wikimedia Commons
 </Credit>
-
----
-clicks: 5
----
-
-### Day 02 · Journey Map
-
-## From Taipei Down to Taichung
-
-<JourneyMap :day="2" />
 
 ---
 
@@ -146,6 +182,18 @@ clicks: 5
 </div>
 
 ---
+clicks: 5
+---
+
+### Day 03 · Journey Map
+
+## Lukang Day Trip & Airport Run
+
+<JourneyMap :day="3" />
+
+---
+class: text-sm
+---
 
 ### Day 03 · Lukang Heritage & Return
 
@@ -154,8 +202,6 @@ clicks: 5
 <div class="grid grid-cols-[1fr_230px] gap-6 mt-3">
 <div>
 
-<v-clicks>
-
 - **Morning｜Taiwan Tourist Shuttle to Lukang**
   - Board shuttle from Taichung Station (~1 hr via EasyCard).
   - Explore **Lukang Old Street**, **Nine-Turns Lane**, and **Lukang Tianhou Temple**.
@@ -163,8 +209,6 @@ clicks: 5
   - Taste local **flour rice noodles (Mianxianhu)**, **taro meatballs (Yuwan)**, and **ox-tongue pastries**.
 - **Evening｜Budget Return to Taoyuan Airport**
   - Take intercity coach directly from Taichung/Changhua to **Taoyuan Airport (TPE)** (skipping HSR to stay under NT$ 6,000).
-
-</v-clicks>
 
 > **Return Route:** `Lukang` ➔ `Taichung` ➔ `Taoyuan Airport (TPE)`
 
@@ -180,25 +224,20 @@ Tianhou Temple: Foxy Who (CC BY-SA 3.0) · Nine-Turns Lane: David Stanley (CC BY
 </Credit>
 
 ---
-clicks: 4
----
-
-### Day 03 · Journey Map
-
-## Lukang Day Trip & Airport Run
-
-<JourneyMap :day="3" />
-
+transition: fade
 ---
 
 ### Day 03 · Scene Preview
 
 ## Lukang Historic Red-Brick Street
 
-<img :src="$asset('/lukang.jpg')" class="h-72 mx-auto rounded-lg shadow-lg" />
+<div class="flex flex-col items-center">
+  <img :src="$asset('/lukang.jpg')" class="h-72 mx-auto rounded-lg shadow-lg" />
+  <p class="!my-0 mt-2 text-xs italic">Photo / AI-Generated Scene Illustration</p>
+</div>
 
-*Photo / AI-Generated Scene Illustration*
-
+---
+class: text-sm
 ---
 
 ### Financial Summary
@@ -210,8 +249,8 @@ clicks: 4
 
 <v-clicks>
 
-- **Day 1 · Taipei & Jiufen — NT$ 1,531**
-  - Breakfast ($65), Train/Bus ($150), Sky Lantern ($60), Jiufen & Ningxia Food ($450), TCM Acupuncture ($250), CU Hotel Taipei ($556)
+- **Day 1 · Taipei & Jiufen — NT$ 1,681**
+  - Breakfast ($65), Train/Bus ($150), Sky Lantern ($60), Jiufen Food ($300), Ningxia Food ($300), TCM Acupuncture ($250), CU Hotel Taipei ($556)
 - **Day 2 · Taipei → Taichung — NT$ 2,090**
   - MRT/Bus ($50), Intercity Coach ($340), Miyahara Ice Cream ($300), Shenji & Greenway Meals ($500), Misc ($300), Taichung Hostel ($600)
 - **Day 3 · Lukang & Return — NT$ 1,300**
@@ -219,7 +258,7 @@ clicks: 4
 
 </v-clicks>
 
-> **<span v-mark.circle.red>Grand Total: ~ NT$ 4,921 – 5,400 / Person</span>** (Smart Coach Strategy saves > NT$ 1,200 vs. High Speed Rail!)
+> **Grand Total: ~ <span v-mark.underline.orange>NT$ 5,071 – 5,550</span> / Person** (Smart Coach Strategy saves > NT$ 1,200 vs. High Speed Rail!)
 
 </div>
 <div class="flex flex-col gap-2">
@@ -230,9 +269,11 @@ clicks: 4
 </div>
 
 <Credit>
-Jiufen: our group · Miyahara: YangChen(TW) (CC BY 2.0) · Tianhou Temple: Foxy Who (CC BY-SA 3.0) — via Wikimedia Commons
+Jiufen: AI-Generated (Gemini) · Miyahara: YangChen(TW) (CC BY 2.0) · Tianhou Temple: Foxy Who (CC BY-SA 3.0) — via Wikimedia Commons
 </Credit>
 
+---
+class: text-sm
 ---
 
 ### Cultural & Historical Insights (1/2)
@@ -240,7 +281,7 @@ Jiufen: our group · Miyahara: YangChen(TW) (CC BY 2.0) · Tianhou Temple: Foxy 
 ## Heritage Context Behind Our Destinations
 
 <div class="flex flex-col gap-3 mt-4">
-<v-clicks>
+  <v-clicks>
   <div class="flex gap-4 items-center">
     <Pic src="/photos/longshan.jpg" class="h-24 w-40 shrink-0" />
     <p class="!my-0"><b>1. Bangka Longshan Temple (1738):</b> Built by Fujian settlers, blending Buddhist, Taoist, and folk deities; famous for intricate woodcarvings and <i>Jiaobei</i> moon-block divination.</p>
@@ -253,13 +294,15 @@ Jiufen: our group · Miyahara: YangChen(TW) (CC BY 2.0) · Tianhou Temple: Foxy 
     <Pic src="/photos/ningxia.jpg" class="h-24 w-40 shrink-0" />
     <p class="!my-0"><b>3. TCM Acupuncture & Ningxia Night Market:</b> Traditional medicine balances <i>Qi</i> via meridian points; Ningxia preserves classic Taiwanese <i>Banquet Snack</i> heritage.</p>
   </div>
-</v-clicks>
+  </v-clicks>
 </div>
 
 <Credit>
-Longshan Temple: CEphoto, Uwe Aranas (CC BY-SA 3.0) · Shifen: xiquinhosilva (CC BY 2.0) · Ningxia: 迷惘的人生 (CC BY-SA 2.0) — via Wikimedia Commons
+Longshan Temple: CEphoto, Uwe Aranas (CC BY-SA 3.0) · Shifen: C.L. Kao (CC BY-SA 3.0) · Ningxia: 迷惘的人生 (CC BY-SA 2.0) — via Wikimedia Commons
 </Credit>
 
+---
+class: text-sm
 ---
 
 ### Cultural & Historical Insights (2/2)
@@ -267,7 +310,7 @@ Longshan Temple: CEphoto, Uwe Aranas (CC BY-SA 3.0) · Shifen: xiquinhosilva (CC
 ## Heritage Context Behind Our Destinations
 
 <div class="flex flex-col gap-3 mt-4">
-<v-clicks>
+  <v-clicks>
   <div class="flex gap-4 items-center">
     <Pic src="/photos/fourfour.jpg" class="h-24 w-40 shrink-0" />
     <p class="!my-0"><b>4. Four Four South Village:</b> Taipei’s first military dependents' village (<i>Juancun</i>), contrasting postwar low-rise homes directly beneath Taipei 101.</p>
@@ -280,12 +323,51 @@ Longshan Temple: CEphoto, Uwe Aranas (CC BY-SA 3.0) · Shifen: xiquinhosilva (CC
     <Pic src="/photos/nineturns.jpg" class="h-24 w-40 shrink-0" />
     <p class="!my-0"><b>6. Lukang Historic Port Town:</b> Once Taiwan's second-largest port ("One Tainan, Two Lukang, Three Mengjia"), preserving red-brick alleys and wind-shielding <i>Nine-Turns Lanes</i>.</p>
   </div>
-</v-clicks>
+  </v-clicks>
 </div>
 
 <Credit>
 Four Four South Village: Hal Maa (CC BY-SA 4.0) · Shenji: Wpcpey (CC BY 4.0) · Nine-Turns Lane: David Stanley (CC BY 2.0) — via Wikimedia Commons
 </Credit>
+
+---
+class: text-xs
+---
+
+### References & Attributions
+
+## Photo Credits & Sources
+
+<div class="grid grid-cols-2 gap-x-6 gap-y-1.5 mt-3 leading-snug">
+<div>
+
+**Cover & Day 1**
+- **Jiufen Cover:** Sunkenbean (CC BY-SA 4.0), Wikimedia Commons
+- **Yonghe Soy Milk:** KQuhen (CC BY-SA 4.0), Wikimedia Commons
+- **Bangka Longshan Temple:** CEphoto, Uwe Aranas (CC BY-SA 3.0), Wikimedia Commons
+- **Shifen Old Street:** C.L. Kao (CC BY-SA 3.0), Wikimedia Commons
+- **Jiufen Old Street:** AI-Generated (Gemini)
+- **TCM Acupuncture:** Kyle Hunter (Public Domain), Wikimedia Commons
+- **Ningxia Night Market:** 迷惘的人生 (CC BY-SA 2.0), Wikimedia Commons
+
+</div>
+<div>
+
+**Day 2, Day 3 & Closing**
+- **Four Four South Village:** Hal Maa (CC BY-SA 4.0), Wikimedia Commons
+- **Taipei 101:** AngMoKio (CC BY-SA 3.0), Wikimedia Commons
+- **Taipei Bus Station:** Chen Hao Hsuan (CC BY 2.0), Wikimedia Commons
+- **Miyahara Eye Hospital:** YangChen(TW) (CC BY 2.0), Wikimedia Commons
+- **Miyahara Ice Cream:** Taken by our group
+- **Shenji New Village:** Wpcpey (CC BY 4.0), Wikimedia Commons
+- **Lukang Tianhou Temple:** Foxy Who (CC BY-SA 3.0), Wikimedia Commons
+- **Nine-Turns Lane:** David Stanley (CC BY 2.0), Wikimedia Commons
+- **Lukang Red-Brick Street:** AI-Generated Scene Illustration
+- **Taipei Skyline (Closing):** Man Ng (CC BY 2.0), Wikimedia Commons
+- **Taiwan Map Boundaries:** MOI NLSC (OGDL 1.0) via taiwan-atlas
+
+</div>
+</div>
 
 ---
 layout: cover
@@ -297,14 +379,7 @@ class: text-center
 
 ### Six Grand, Endless Wonders
 
-We welcome any questions about our itinerary, cultural highlights, or budget planning.
-
 **Presented by:** 何宣辰、阮紫瑄、曾筠淇、張詠皓、麥樂筠
-
-<div class="absolute bottom-6 left-6 flex flex-col items-center gap-1">
-  <img :src="$asset('/qr.svg')" class="w-20 rounded bg-white p-1" />
-  <span class="text-[9px] opacity-80">Slides & PDF</span>
-</div>
 
 <Credit>
 Taipei skyline: Man Ng (CC BY 2.0), via Wikimedia Commons
