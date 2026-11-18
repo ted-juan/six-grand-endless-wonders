@@ -1,11 +1,14 @@
 <!--
-  JourneyMap — 一天行程的動態路線圖（區域地圖 + 左側時間軸 + 迷你旅人 + 到站實景放大）。
-  用法：<JourneyMap :day="1" />，並在該頁 frontmatter 設定 clicks = 站數 + 1。
-    click 0      ：全日總覽（迷你旅人站在起點）
-    click 1      ：鏡頭拉近並放大第一站實景
-    click 2..N   ：回到地圖，跟隨迷你旅人移動到下一站並放大該站實景
-    click N+1    ：全日總覽（所有路線）
-  底圖：內政部鄉鎮市區界（taiwan-atlas, MIT），已預先投影成 data/taiwan-map.json。
+  JourneyMap — animated route map for one day of an itinerary: regional map + timeline on the left,
+  a mini traveller walking the route, and a photo "scene card" that zooms in at each stop.
+  Usage: <JourneyMap :day="1" />, and set clicks = number of stops + 1 in that slide's frontmatter.
+    click 0      : day overview (the traveller stands at the first stop)
+    click 1      : camera zooms to the first stop and its scene card opens
+    click 2..N   : back to the map; the traveller (and vehicle) moves along the next leg, then that stop's scene opens
+    click N+1    : day overview (all routes)
+  Per-stop scene animation: effect / effectLabel in data/journeys.ts (see SceneEffect.vue).
+  Basemap: Taiwan township boundaries from taiwan-atlas (MIT, Ministry of the Interior data),
+  pre-projected into data/taiwan-map.json.
 -->
 <script setup lang="ts">
 import { useSlideContext } from '@slidev/client'
@@ -340,29 +343,7 @@ const landTransform = computed(() => `translate(${-cam.x * scale.value},${-cam.y
           </div>
           <div class="scene-title">{{ activeScene.name }}</div>
 
-          <!-- Moon-block divination (擲筊) animation for Longshan Temple -->
-          <div v-if="activeScene.effect === 'jiaobei'" class="jiaobei-box">
-            <svg viewBox="0 0 120 76" width="110" height="70" class="jiaobei-svg">
-              <!-- ground shadow -->
-              <ellipse cx="38" cy="64" rx="18" ry="4" fill="rgba(0,0,0,0.35)" />
-              <ellipse cx="82" cy="64" rx="18" ry="4" fill="rgba(0,0,0,0.35)" />
-              <!-- left moon block (flat side up - light inner wood) -->
-              <g class="block-left">
-                <path d="M18,56 C22,40 46,38 54,54 C44,58 28,60 18,56 Z" fill="#fca5a5" stroke="#991b1b" stroke-width="2" />
-                <path d="M22,55 C28,45 42,44 50,53" fill="none" stroke="#fef2f2" stroke-width="1.5" stroke-linecap="round" />
-              </g>
-              <!-- right moon block (curved side up - deep red) -->
-              <g class="block-right">
-                <path d="M66,54 C74,38 98,40 102,56 C92,60 76,58 66,54 Z" fill="#dc2626" stroke="#7f1d1d" stroke-width="2" />
-                <path d="M72,49 C80,43 90,44 96,50" fill="none" stroke="#f87171" stroke-width="1.8" stroke-linecap="round" />
-              </g>
-              <!-- golden sparkles -->
-              <circle cx="60" cy="24" r="2.2" fill="#fde047" class="sparkle s1" />
-              <circle cx="44" cy="18" r="1.6" fill="#fde047" class="sparkle s2" />
-              <circle cx="76" cy="20" r="1.8" fill="#fde047" class="sparkle s3" />
-            </svg>
-            <div class="jiaobei-label">擲筊 Moon-Block Divination · <b>聖筊 Shengjiao (Yes!)</b></div>
-          </div>
+          <SceneEffect v-if="activeScene.effect || activeScene.effectLabel" :name="activeScene.effect ?? ''" :label="activeScene.effectLabel" />
         </div>
       </Transition>
 
@@ -446,34 +427,6 @@ const landTransform = computed(() => `translate(${-cam.x * scale.value},${-cam.y
   padding: 4px 10px; border-radius: 999px; background: rgba(15, 23, 42, .72); color: #fef3c7; font-size: 11px; font-weight: 600; backdrop-filter: blur(4px); }
 .scene-dot { width: 7px; height: 7px; border-radius: 50%; background: #f59e0b; box-shadow: 0 0 0 3px rgba(245, 158, 11, .3); }
 .scene-title { position: absolute; left: 16px; bottom: 14px; color: #fff; font-size: 20px; font-weight: 700; text-shadow: 0 2px 8px rgba(0, 0, 0, .6); max-width: 60%; }
-
-.jiaobei-box { position: absolute; right: 12px; bottom: 12px; padding: 8px 12px; border-radius: 10px;
-  background: rgba(15, 23, 42, .82); border: 1px solid rgba(251, 191, 36, .45); backdrop-filter: blur(6px);
-  display: flex; flex-direction: column; align-items: center; gap: 2px; }
-.jiaobei-label { font-size: 10px; color: #fef3c7; white-space: nowrap; }
-.jiaobei-label b { color: #fde047; }
-.block-left { transform-origin: 36px 52px; animation: toss-left 1.3s cubic-bezier(.22,1,.36,1) forwards; }
-.block-right { transform-origin: 84px 52px; animation: toss-right 1.3s cubic-bezier(.22,1,.36,1) forwards; }
-@keyframes toss-left {
-  0% { transform: translateY(-28px) rotate(-140deg) scale(.85); opacity: 0; }
-  45% { transform: translateY(-34px) rotate(40deg) scale(1.05); opacity: 1; }
-  75% { transform: translateY(2px) rotate(-8deg); }
-  100% { transform: translateY(0) rotate(0deg); }
-}
-@keyframes toss-right {
-  0% { transform: translateY(-32px) rotate(160deg) scale(.85); opacity: 0; }
-  50% { transform: translateY(-36px) rotate(-35deg) scale(1.05); opacity: 1; }
-  78% { transform: translateY(2px) rotate(8deg); }
-  100% { transform: translateY(0) rotate(0deg); }
-}
-.sparkle { opacity: 0; animation: pop-sparkle .8s ease-out 1.1s forwards; }
-.s2 { animation-delay: 1.2s; }
-.s3 { animation-delay: 1.3s; }
-@keyframes pop-sparkle {
-  0% { opacity: 0; transform: scale(0); }
-  60% { opacity: 1; transform: scale(1.3); }
-  100% { opacity: .9; transform: scale(1); }
-}
 
 .scene-zoom-enter-active { transition: opacity .35s ease, transform .4s cubic-bezier(.22,1,.36,1); }
 .scene-zoom-leave-active { transition: opacity .25s ease, transform .25s ease; }

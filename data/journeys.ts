@@ -13,7 +13,10 @@ export interface Stop {
   /** 地圖上標籤放哪一側 */
   side?: 'left' | 'right' | 'top' | 'bottom'
   leg?: { mode: Mode, note: string }
-  effect?: 'jiaobei'
+  /** Animation on this stop's scene card (SceneEffect.vue) */
+  effect?: 'jiaobei' | 'incense' | 'lanterns' | 'steam' | 'sparkle' | 'petals' | 'plane'
+  /** Caption in the effect box */
+  effectLabel?: string
 }
 
 export const modes: Record<Mode, { label: string, color: string, icon: string }> = {
@@ -25,16 +28,16 @@ export const modes: Record<Mode, { label: string, color: string, icon: string }>
 
 export const journeys: Record<number, Stop[]> = {
   1: [
-    { name: 'Ximending (Yonghe Soy Milk)', time: '07:00', lon: 121.5078, lat: 25.0422, thumb: '/photos/yonghe.jpg', side: 'top' },
-    { name: 'Longshan Temple', time: '08:30', lon: 121.4999, lat: 25.0372, thumb: '/photos/longshan.jpg', side: 'bottom', leg: { mode: 'walk', note: 'Walk · ~18 min' }, effect: 'jiaobei' },
-    { name: 'Shifen Old Street', time: 'Afternoon', lon: 121.7756, lat: 25.0418, thumb: '/photos/shifen.jpg', side: 'bottom', leg: { mode: 'train', note: 'TRA · ~1 hr' } },
-    { name: 'Jiufen Old Street', time: 'Dusk', lon: 121.8437, lat: 25.1093, thumb: '/jiufen.jpg', side: 'left', leg: { mode: 'bus', note: 'Bus · ~1 hr' } },
+    { name: 'Ximending (Yonghe Soy Milk)', time: '07:00', lon: 121.5078, lat: 25.0422, thumb: '/photos/yonghe.jpg', side: 'top', effect: 'steam' },
+    { name: 'Longshan Temple', time: '08:30', lon: 121.4999, lat: 25.0372, thumb: '/photos/longshan.jpg', side: 'bottom', leg: { mode: 'walk', note: 'Walk · ~18 min' }, effect: 'jiaobei', effectLabel: '擲筊 Moon-Block Divination · 聖筊 Shengjiao (Yes!)' },
+    { name: 'Shifen Old Street', time: 'Afternoon', lon: 121.7756, lat: 25.0418, thumb: '/photos/shifen.jpg', side: 'bottom', leg: { mode: 'train', note: 'TRA · ~1 hr' }, effect: 'lanterns' },
+    { name: 'Jiufen Old Street', time: 'Dusk', lon: 121.8437, lat: 25.1093, thumb: '/jiufen.jpg', side: 'left', leg: { mode: 'bus', note: 'Bus · ~1 hr' }, effect: 'sparkle' },
     { name: 'Changshengtang TCM (Acupuncture)', time: 'Evening', lon: 121.5202, lat: 25.0578, thumb: '/photos/acupuncture.jpg', side: 'right', leg: { mode: 'bus', note: 'Bus · ~1 hr' } },
-    { name: 'Ningxia Night Market', time: 'Night', lon: 121.5153, lat: 25.0563, thumb: '/photos/ningxia.jpg', side: 'left', leg: { mode: 'walk', note: 'Walk · ~8 min' } },
+    { name: 'Ningxia Night Market', time: 'Night', lon: 121.5153, lat: 25.0563, thumb: '/photos/ningxia.jpg', side: 'left', leg: { mode: 'walk', note: 'Walk · ~8 min' }, effect: 'steam' },
   ],
   2: [
     { name: 'Four Four South Village', time: '09:00', lon: 121.5617, lat: 25.0312, thumb: '/photos/fourfour.jpg', side: 'left' },
-    { name: 'Taipei 101', time: '10:30', lon: 121.5645, lat: 25.0339, thumb: '/photos/taipei101.jpg', side: 'right', leg: { mode: 'walk', note: 'Walk · ~10 min' } },
+    { name: 'Taipei 101', time: '10:30', lon: 121.5645, lat: 25.0339, thumb: '/photos/taipei101.jpg', side: 'right', leg: { mode: 'walk', note: 'Walk · ~10 min' }, effect: 'sparkle' },
     { name: 'Taipei Bus Station', time: '12:00', lon: 121.5175, lat: 25.0492, thumb: '/photos/taipei-bus-station.jpg', side: 'left', leg: { mode: 'walk', note: 'MRT · ~25 min' } },
     { name: 'Miyahara Eye Hospital', time: '14:30', lon: 120.6838, lat: 24.1375, thumb: '/photos/miyahara.jpg', side: 'right', leg: { mode: 'coach', note: 'Coach · ~2.5 hrs' } },
     { name: 'Shenji New Village', time: '16:30', lon: 120.6627, lat: 24.1446, thumb: '/photos/shenji.jpg', side: 'left', leg: { mode: 'bus', note: 'Bus · ~20 min' } },
@@ -42,8 +45,8 @@ export const journeys: Record<number, Stop[]> = {
   ],
   3: [
     { name: 'Taichung Station', time: 'Morning', lon: 120.6853, lat: 24.1372, thumb: '/photos/miyahara.jpg', side: 'right' },
-    { name: 'Lukang Old Town', time: 'Late morning', lon: 120.4340, lat: 24.0560, thumb: '/photos/tianhou.jpg', side: 'bottom', leg: { mode: 'bus', note: 'Shuttle · ~1 hr' } },
+    { name: 'Lukang Old Town', time: 'Late morning', lon: 120.4340, lat: 24.0560, thumb: '/photos/tianhou.jpg', side: 'bottom', leg: { mode: 'bus', note: 'Shuttle · ~1 hr' }, effect: 'incense' },
     { name: 'Taichung Station', time: 'Evening', lon: 120.6853, lat: 24.1372, thumb: '/photos/miyahara.jpg', side: 'right', leg: { mode: 'bus', note: 'Shuttle · ~45 min' } },
-    { name: 'Taoyuan Airport (TPE)', time: 'Departure', lon: 121.2332, lat: 25.0777, thumb: '/photos/skyline.jpg', side: 'left', leg: { mode: 'coach', note: 'Coach · ~2 hrs' } },
+    { name: 'Taoyuan Airport (TPE)', time: 'Departure', lon: 121.2332, lat: 25.0777, thumb: '/photos/skyline.jpg', side: 'left', leg: { mode: 'coach', note: 'Coach · ~2 hrs' }, effect: 'plane' },
   ],
 }

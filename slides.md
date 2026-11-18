@@ -5,11 +5,17 @@ class: text-center
 title: Six Grand, Endless Wonders
 exportFilename: six-grand-endless-wonders
 transition: slide-left
+fonts:
+  sans: Noto Sans,Noto Sans TC
+  serif: Noto Serif,Noto Serif TC
+  mono: Fira Code
 ---
 
 # Six Grand, Endless Wonders
 
-<p class="!opacity-95" style="text-shadow: 0 2px 10px rgba(0,0,0,.9)">Team Taiwan</p>
+<p class="!opacity-95" style="text-shadow: 0 2px 10px rgba(0,0,0,.9)"><TypeIn>Team Taiwan</TypeIn></p>
+
+<Particles kind="lantern" :count="8" :speed="0.8" />
 
 **Team Members:** 何宣辰、阮紫瑄、曾筠淇、張詠皓、麥樂筠
 
@@ -18,14 +24,12 @@ Cover: Jiufen Old Street at night — Sunkenbean (CC BY-SA 4.0), via Wikimedia C
 </Credit>
 
 ---
-class: text-sm
----
 
 ### Overview · Agenda
 
 ## Table of Contents
 
-<div class="grid grid-cols-2 gap-4 mt-6">
+<Stagger class="grid grid-cols-2 gap-4 mt-6">
   <Link to="3" class="!border-none block p-4 rounded-lg bg-amber-50/70 hover:bg-amber-100/80 transition">
     <div class="text-xs font-bold tracking-wider uppercase text-amber-700">01 · Day 01</div>
     <div class="text-base font-bold mt-1 text-slate-800">Taipei & Mountain Towns</div>
@@ -61,7 +65,7 @@ class: text-sm
     <div class="text-base font-bold mt-1 text-slate-800">Photo Credits & Sources</div>
     <div class="text-xs text-slate-600 mt-1">Wikimedia Commons & Attribution References</div>
   </Link>
-</div>
+</Stagger>
 
 ---
 clicks: 7
@@ -77,8 +81,6 @@ clicks: 7
 Yonghe Soy Milk: KQuhen (CC BY-SA 4.0) · Acupuncture: Kyle Hunter (Public Domain) — via Wikimedia Commons
 </Credit>
 
----
-class: text-sm
 ---
 
 ### Day 01 · Taipei & Mountain Towns
@@ -97,13 +99,13 @@ class: text-sm
 - **Evening｜TCM & Night Market**
   - Acupuncture at **Changshengtang TCM Clinic** (NT$150–300), **Ningxia Night Market**, & stay at **CU Hotel Taipei** (NT$556).
 
-> **Day 1 Estimated Cost:** ~ <span v-mark.underline.orange>NT$ 1,681</span> / person
+> **Day 1 Estimated Cost:** ~ <span v-mark.underline.orange><CountUp>NT$ 1,681</CountUp></span> / person
 
 </div>
 <div class="flex flex-col gap-4">
   <Pic src="/photos/longshan.jpg" label="Bangka Longshan Temple" class="h-26" />
-  <Pic src="/photos/shifen.jpg" label="Shifen Old Street · Sky Lanterns" class="h-26" />
-  <Pic src="/photos/ningxia.jpg" label="Ningxia Night Market" class="h-26" />
+  <div class="relative"><Pic src="/photos/shifen.jpg" label="Shifen Old Street · Sky Lanterns" class="h-26" /><Particles kind="lantern" :count="4" /></div>
+  <div class="relative"><Pic src="/photos/ningxia.jpg" label="Ningxia Night Market" class="h-26" /><Particles kind="steam" :count="4" class="!top-auto h-2/3" /></div>
 </div>
 </div>
 
@@ -126,8 +128,6 @@ Taipei 101: AngMoKio (CC BY-SA 3.0) · Taipei Bus Station: Chen Hao Hsuan (CC BY
 </Credit>
 
 ---
-class: text-sm
----
 
 ### Day 02 · Heading South to Taichung
 
@@ -143,7 +143,7 @@ class: text-sm
 
 <div class="text-xs [&_td]:!py-1 [&_th]:!py-1">
 
-**Day 2 Budget Breakdown (Subtotal: <span v-mark.underline.orange>NT$ 2,090</span>):**
+**Day 2 Budget Breakdown (Subtotal: <span v-mark.underline.orange><CountUp>NT$ 2,090</CountUp></span>):**
 
 | Item | Cost | Item | Cost |
 |---|---|---|---|
@@ -170,13 +170,15 @@ Four Four South Village: Hal Maa (CC BY-SA 4.0) · Miyahara: YangChen(TW) (CC BY
 
 ## Route: `Taipei` ➔ *(2.5 hrs Coach)* ➔ `Taichung`
 
-<div class="flex justify-center items-end gap-6 mt-4">
+<CoachRide class="w-[560px] mx-auto mt-1" />
+
+<div class="flex justify-center items-end gap-6 mt-2">
   <div class="text-center">
-    <Pic src="/photos/miyahara.jpg" label="Miyahara Eye Hospital, Taichung" class="h-64 w-96" />
+    <Pic src="/photos/miyahara.jpg" label="Miyahara Eye Hospital, Taichung" motion="kenburns" class="h-60 w-96" />
     <p class="!my-1 text-xs italic">Photo / YangChen(TW), CC BY 2.0, via Wikimedia Commons</p>
   </div>
   <div class="text-center">
-    <Pic src="/icecream.jpg" label="Miyahara Ice Cream" class="h-64 w-40" />
+    <Pic src="/icecream.jpg" label="Miyahara Ice Cream" class="h-60 w-40" />
     <p class="!my-1 text-xs italic">Photo / Taken by our group</p>
   </div>
 </div>
@@ -191,8 +193,6 @@ clicks: 5
 
 <JourneyMap :day="3" />
 
----
-class: text-sm
 ---
 
 ### Day 03 · Lukang Heritage & Return
@@ -214,7 +214,7 @@ class: text-sm
 
 </div>
 <div class="flex flex-col gap-2">
-  <Pic src="/photos/tianhou.jpg" label="Lukang Tianhou Temple" class="h-40" />
+  <div class="relative"><Pic src="/photos/tianhou.jpg" label="Lukang Tianhou Temple" class="h-40" /><Particles kind="smoke" :count="4" class="!top-auto h-3/4" /></div>
   <Pic src="/photos/nineturns.jpg" label="Nine-Turns Lane" class="h-40" />
 </div>
 </div>
@@ -232,12 +232,10 @@ transition: fade
 ## Lukang Historic Red-Brick Street
 
 <div class="flex flex-col items-center">
-  <img :src="$asset('/lukang.jpg')" class="h-72 mx-auto rounded-lg shadow-lg" />
+  <Pic src="/lukang.jpg" motion="kenburns" class="h-72 w-[480px] mx-auto !shadow-lg" />
   <p class="!my-0 mt-2 text-xs italic">Photo / AI-Generated Scene Illustration</p>
 </div>
 
----
-class: text-sm
 ---
 
 ### Financial Summary
@@ -258,7 +256,7 @@ class: text-sm
 
 </v-clicks>
 
-> **Grand Total: ~ <span v-mark.underline.orange>NT$ 5,071 – 5,550</span> / Person** (Smart Coach Strategy saves > NT$ 1,200 vs. High Speed Rail!)
+> **Grand Total: ~ <span v-mark.underline.orange><CountUp>NT$ 5,071 – 5,550</CountUp></span> / Person** (Smart Coach Strategy saves > NT$ 1,200 vs. High Speed Rail!)
 
 </div>
 <div class="flex flex-col gap-2">
@@ -273,8 +271,6 @@ Jiufen: AI-Generated (Gemini) · Miyahara: YangChen(TW) (CC BY 2.0) · Tianhou T
 </Credit>
 
 ---
-class: text-sm
----
 
 ### Cultural & Historical Insights (1/2)
 
@@ -283,15 +279,15 @@ class: text-sm
 <div class="flex flex-col gap-3 mt-4">
   <v-clicks>
   <div class="flex gap-4 items-center">
-    <Pic src="/photos/longshan.jpg" class="h-24 w-40 shrink-0" />
+    <div class="relative shrink-0"><Pic src="/photos/longshan.jpg" class="h-24 w-40" /><Particles kind="smoke" :count="3" class="!top-auto h-3/4" /></div>
     <p class="!my-0"><b>1. Bangka Longshan Temple (1738):</b> Built by Fujian settlers, blending Buddhist, Taoist, and folk deities; famous for intricate woodcarvings and <i>Jiaobei</i> moon-block divination.</p>
   </div>
   <div class="flex gap-4 items-center">
-    <Pic src="/photos/shifen.jpg" class="h-24 w-40 shrink-0" />
+    <div class="relative shrink-0"><Pic src="/photos/shifen.jpg" class="h-24 w-40" /><Particles kind="lantern" :count="3" /></div>
     <p class="!my-0"><b>2. Shifen & Jiufen Mining Towns:</b> Shifen sky lanterns served as early safety signals; Jiufen prospered during the Japanese gold rush with iconic steep stairways and teahouses.</p>
   </div>
   <div class="flex gap-4 items-center">
-    <Pic src="/photos/ningxia.jpg" class="h-24 w-40 shrink-0" />
+    <div class="relative shrink-0"><Pic src="/photos/ningxia.jpg" class="h-24 w-40" /><Particles kind="steam" :count="3" class="!top-auto h-2/3" /></div>
     <p class="!my-0"><b>3. TCM Acupuncture & Ningxia Night Market:</b> Traditional medicine balances <i>Qi</i> via meridian points; Ningxia preserves classic Taiwanese <i>Banquet Snack</i> heritage.</p>
   </div>
   </v-clicks>
@@ -302,8 +298,6 @@ Longshan Temple: CEphoto, Uwe Aranas (CC BY-SA 3.0) · Shifen: C.L. Kao (CC BY-S
 </Credit>
 
 ---
-class: text-sm
----
 
 ### Cultural & Historical Insights (2/2)
 
@@ -312,15 +306,15 @@ class: text-sm
 <div class="flex flex-col gap-3 mt-4">
   <v-clicks>
   <div class="flex gap-4 items-center">
-    <Pic src="/photos/fourfour.jpg" class="h-24 w-40 shrink-0" />
+    <Pic src="/photos/fourfour.jpg" motion="kenburns" class="h-24 w-40 shrink-0" />
     <p class="!my-0"><b>4. Four Four South Village:</b> Taipei’s first military dependents' village (<i>Juancun</i>), contrasting postwar low-rise homes directly beneath Taipei 101.</p>
   </div>
   <div class="flex gap-4 items-center">
-    <Pic src="/photos/shenji.jpg" class="h-24 w-40 shrink-0" />
+    <Pic src="/photos/shenji.jpg" motion="kenburns" class="h-24 w-40 shrink-0" />
     <p class="!my-0"><b>5. Miyahara & Shenji New Village:</b> Adaptive reuse of a 1927 Japanese eye clinic and provincial government dorms into thriving confectionery and youth design hubs.</p>
   </div>
   <div class="flex gap-4 items-center">
-    <Pic src="/photos/nineturns.jpg" class="h-24 w-40 shrink-0" />
+    <Pic src="/photos/nineturns.jpg" motion="kenburns" class="h-24 w-40 shrink-0" />
     <p class="!my-0"><b>6. Lukang Historic Port Town:</b> Once Taiwan's second-largest port ("One Tainan, Two Lukang, Three Mengjia"), preserving red-brick alleys and wind-shielding <i>Nine-Turns Lanes</i>.</p>
   </div>
   </v-clicks>
@@ -380,6 +374,8 @@ class: text-center
 ### Six Grand, Endless Wonders
 
 **Presented by:** 何宣辰、阮紫瑄、曾筠淇、張詠皓、麥樂筠
+
+<Particles kind="sparkle" :count="12" />
 
 <Credit>
 Taipei skyline: Man Ng (CC BY 2.0), via Wikimedia Commons
