@@ -5,6 +5,10 @@ class: text-center
 title: Six Grand, Endless Wonders
 exportFilename: six-grand-endless-wonders
 transition: slide-left
+fonts:
+  sans: Noto Sans,Noto Sans TC
+  serif: Noto Serif,Noto Serif TC
+  mono: Fira Code
 ---
 
 # Six Grand, Endless Wonders
@@ -17,8 +21,6 @@ transition: slide-left
 Cover: Jiufen Old Street at night — Sunkenbean (CC BY-SA 4.0), via Wikimedia Commons
 </Credit>
 
----
-class: text-sm
 ---
 
 ### Day 01 · Taipei & Mountain Towns
@@ -75,8 +77,6 @@ clicks: 4
 
 *Photo / Taken by our group*
 
----
-class: text-sm
 ---
 
 ### Day 02 · Heading South to Taichung
@@ -146,8 +146,6 @@ clicks: 5
 </div>
 
 ---
-class: text-sm
----
 
 ### Day 03 · Lukang Heritage & Return
 
@@ -202,8 +200,6 @@ clicks: 4
 *Photo / AI-Generated Scene Illustration*
 
 ---
-class: text-sm
----
 
 ### Financial Summary
 
@@ -238,8 +234,6 @@ Jiufen: our group · Miyahara: YangChen(TW) (CC BY 2.0) · Tianhou Temple: Foxy 
 </Credit>
 
 ---
-class: text-sm
----
 
 ### Cultural & Historical Insights (1/2)
 
@@ -266,8 +260,6 @@ class: text-sm
 Longshan Temple: CEphoto, Uwe Aranas (CC BY-SA 3.0) · Shifen: xiquinhosilva (CC BY 2.0) · Ningxia: 迷惘的人生 (CC BY-SA 2.0) — via Wikimedia Commons
 </Credit>
 
----
-class: text-sm
 ---
 
 ### Cultural & Historical Insights (2/2)

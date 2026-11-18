@@ -6,7 +6,7 @@
     "build": "slidev build --download",
     "dev": "slidev --open",
     "export": "slidev export",
-    "deploy": "slidev build --download && npx -y netlify-cli deploy --prod --dir dist"
+    "deploy:netlify": "slidev build --download && npx -y netlify-cli deploy --prod --dir dist"
   },
   "dependencies": {
     "@slidev/cli": "^52.20.1",
